@@ -89,7 +89,7 @@ function NotesUploads({seteditIconColor,deleteFile,NotesDataApi}) {
 const DownloadNotes=async(files,index)=>{
     
     var blob = new Blob([document.getElementById("notes_body").textContent], {type: "application/msword"});
-    FileSaver.saveAs(blob, `${files.heading}.Docx`);
+    FileSaver.saveAs(blob, `${files.heading}.doc`);
     
 }
 

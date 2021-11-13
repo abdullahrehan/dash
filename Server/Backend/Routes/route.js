@@ -39,13 +39,13 @@ route.post("/convert",async(req,res)=>{
 
 })
 
-// route.get("/",(req,res)=>{
-//     console.log('as')
-//     const sendWebData=()=>{
-//          Model.find( (err,data)=>{res.send(data);})}
-//     sendWebData();
-// // res.send('ok')
-// })     
+route.get("/",(req,res)=>{
+    console.log('as')
+    const sendWebData=()=>{
+         Model.find( (err,data)=>{res.send(data);})}
+    sendWebData();
+// res.send('ok')
+})     
 
 route.post("/nameverify",(req,res)=>{
 
