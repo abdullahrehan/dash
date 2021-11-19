@@ -14,6 +14,7 @@ const route=express.Router()
 const app=express()
 const code=Math.floor(Math.random() * (1000-9999 + 1)) + 9999
 const HTMLtoDOCX = require('html-to-docx')
+require('dotenv').config()
 
 // var compression = require('compression')
 // app.use(compression())
@@ -39,13 +40,13 @@ route.post("/convert",async(req,res)=>{
 
 })
 
-// route.get("/",(req,res)=>{
-//     console.log('as')
-//     const sendWebData=()=>{
-//          Model.find( (err,data)=>{res.send(data);})}
-//     sendWebData();
-// // res.send('ok')
-// })     
+route.get("/",(req,res)=>{
+    console.log('as')
+    const sendWebData=()=>{
+         Model.find( (err,data)=>{res.send(data);})}
+    sendWebData();
+// res.send('ok')
+})     
 
 route.post("/nameverify",(req,res)=>{
 
@@ -955,7 +956,8 @@ route.post("/user/SignIn",async(req,res)=>{
 route.post("/user/login",(req,res)=>{
     Model.find({email:req.body.email},(err,data)=>{
         // console.log(data);
-
+// console.log(process.env.SECRET_KEY)
+// console.log("login")
         if(data[0]!==undefined){
 
         if(data[0].password==req.body.password){

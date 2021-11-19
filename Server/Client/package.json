@@ -2,6 +2,7 @@
   "name": "new",
   "homepage": "",
   "version": "0.1.0",
+  "proxy":"http://localhost:2000/",
   "engines": {
     "node": "14.x"
   },

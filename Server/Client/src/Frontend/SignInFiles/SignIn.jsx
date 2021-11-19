@@ -240,7 +240,7 @@ import '../../css/SignIn.css'
                 dispatch({type:"setAccountData",accData:res.data});
             }
             
-            // console.log(res.data);
+            console.log(res.data);
         })        
         
     }

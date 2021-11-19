@@ -303,7 +303,7 @@ const resetForm=()=>{
                
                 <span id='preview_frame_cross_icon'><ImCross size={30} onClick={()=>{return setpreview_frame(false)}}/></span>
                 <div id='preview_frame_image_div'>
-                    <img id="images_of_preview_frame" width="200" src={state.url} style={{zIndex: 2}}/>
+                    <img id="images_of_preview_frame"  width="200" src={state.url} style={{zIndex: 2}}/>
                     <button onClick={()=>PrevImage(state.url)} disabled={disableprevbutton ? true:false} id='preview_frame_prev_button' type="button" className="btn btn-dark"><FcPrevious size={30}/></button>
                     <button onClick={()=>NextImage(state.url)} disabled={disablenextbutton ? true:false} id='preview_frame_next_button' type="button" className="btn btn-dark"><FcNext size={30}/></button>
                 </div>   
