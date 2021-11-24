@@ -2,6 +2,7 @@ const {OAuth2Client} = require('google-auth-library');const client=new OAuth2Cli
 const Model=require("../Model/Mongo.js")
 const validator=require('email-validator')
 const nodemailer = require('nodemailer');
+const sendGridTransport=require("nodemailer-sendgrid-transport")
 var passport = require('passport');
 const jwt=require("jsonwebtoken");
 const express=require("express")
@@ -14,7 +15,6 @@ const route=express.Router()
 const app=express()
 const code=Math.floor(Math.random() * (1000-9999 + 1)) + 9999
 const HTMLtoDOCX = require('html-to-docx')
-require('dotenv').config()
 
 // var compression = require('compression')
 // app.use(compression())
@@ -40,13 +40,13 @@ route.post("/convert",async(req,res)=>{
 
 })
 
-// route.get("/",(req,res)=>{
-//     console.log('as')
-//     const sendWebData=()=>{
-//          Model.find( (err,data)=>{res.send(data);})}
-//     sendWebData();
-// // res.send('ok')
-// })     
+route.get("/",(req,res)=>{
+    console.log('as')
+    const sendWebData=()=>{
+         Model.find( (err,data)=>{res.send(data);})}
+    sendWebData();
+// res.send('ok')
+})     
 
 route.post("/nameverify",(req,res)=>{
 
@@ -71,24 +71,16 @@ route.post("/nameverify",(req,res)=>{
 })
 route.post("/emailverify",(req,res)=>{
 
-    console.log("emailverify",req.body.email)
-
     Model.find( 
         {email:req.body.email},
         (err,data)=>{
-          if(data.length!==0){
-            //   console.log('email already taken')
-            //   console.log(data)
-              res.send('not available')
+            try {
+                if(data===[]){ res.send('not available')}
+                else{res.send('available')}   
+            } 
+            catch (error) { console.log(error) }
+        })     
 
-
-            }
-          else{
-            //   console.log('email Available')
-              res.send('available')
-            }
-    })     
-    
 })
 
 route.post("/ViewAllMode",(req,res)=>{
@@ -874,24 +866,30 @@ route.post("/user/sendConfirmation",async(req,res)=>{
    
     const transporter=nodemailer.createTransport({
         service:"gmail",
-        auth:{
-            user:"abdullahrehan8118@gmail.com",
-            pass:'123654789@qwerty'
-        }
+        // auth:{
+        //     user:"abdullahrehan786786@gmail.com",
+        //     pass:"123654789qwerty@",
+        // }
+        auth: {
+            user:"abdullahrehan786786@gmail.com",
+            pass:"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",
+    }
     })
-  
-    console.log(code);
-    console.log(req.body.name);
-    
+
     const mailoption={
-        from:'abdullahrehan8118@gmail.com',
-        to:"abdullahrehan786786@gmail.com",
+        from:"abdullahrehan786786@gmail.com",
+        to:"abdullahrehan8118@gmail.com",
         subject:"DataShare Verification",
         text:`Hello ${req.body.name} ! We are happy to know that you  want to create account in our website . And you are only one step far . Write this confirmation code :  ${code}`
     }
 
-    transporter.sendMail(mailoption,(err,data)=>{console.log(data);})
-    // console.log(req.body.confirmation_Code);
+    transporter.sendMail(mailoption,(error,res)=>{
+        if (error) {
+            return
+            console.log(error);
+        }
+        console.log(info);
+    })
 
     })
   
@@ -911,16 +909,13 @@ route.post("/user/SignIn",async(req,res)=>{
 
     console.log(req.body.confirmation_Code,code);
     if(req.body.confirmation_Code==code){
-        console.log('Acess'); 
+        console.log('Acess');
+        console.log(process.env.SECRET_KEY) 
         Model.find({email:req.body.email},(err,data)=>{
  
             if(data[0]==undefined){
-             
-    
-         
-                   
-    
-                    const jwtTokken=jwt.sign({_id:req.body.email},process.env.SECRET_KEY)
+                              
+            const jwtTokken=jwt.sign({_id:req.body.email},process.env.SECRET_KEY)
     
             const insertNewUserModel=Model({
             username:req.body.name,

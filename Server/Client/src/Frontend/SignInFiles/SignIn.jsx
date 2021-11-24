@@ -6,7 +6,6 @@ import {RiAccountPinCircleFill} from "react-icons/ri";
 import {BiError} from "react-icons/bi";
 import axios from 'axios'
 import back from '../../images/g.jpg';
-import Const from '../../images/fairy-tale-wonderful-life-popular-quotes-wallpaper-preview.jpg';
 import sign from '../../images/signs.png'
 import Context from '../HooksFiles/Context'
 import {MdAccountCircle} from 'react-icons/md'; 
@@ -18,8 +17,10 @@ import '../../css/SignIn.css'
     function SignIn() { 
 //----------------------------------------------------------------Assigning States-------------------------------------------------------------
 
-        const {state,dispatch}=useContext(Context)  
-        let [codeInputs,setcodeInputs]=useState({inputOne:"",inputTwo:"",inputThree:"",inputFour:""})
+        let {state,dispatch}=useContext(Context)  
+        let [confirmationCodeInput,setconfirmationCodeInput]=useState({inputOne:"",inputTwo:"",inputThree:"",inputFour:""})
+        let Confirmation_Code=confirmationCodeInput.inputOne+confirmationCodeInput.inputTwo+confirmationCodeInput.inputThree+confirmationCodeInput.inputFour
+        
         let [username,setusername]=useState('')
         let [useremail,setuseremail]=useState('')
         let [userpassword,setuserpassword]=useState('')
@@ -28,7 +29,8 @@ import '../../css/SignIn.css'
             lowercase: true,
             uppercase: 1,
             spaces: false
-          })
+        })
+
         let [loginuseremail,setloginuseremail]=useState('')
         let [loginuserpassword,setloginuserpassword]=useState('')
         let [LoginDemoMessage,setLoginDemoMessage]=useState(false)
@@ -41,7 +43,8 @@ import '../../css/SignIn.css'
         let [confirmCode,setconfirmCode]=useState(false)
         let [login,setlogin]=useState(true)
         let [Sigin,setsignin]=useState(true)
-          const[passwordIncorrectDiv,setpasswordIncorrectDiv]=useState(false)
+        let [passwordIncorrectDiv,setpasswordIncorrectDiv]=useState(false)
+        
         // ------------------------- States for SignIn Errors -------------------------// 
 
         let [allFieldMandatorySigninErrror,setallFieldMandatorySigninErrror]=useState(false)
@@ -57,9 +60,9 @@ import '../../css/SignIn.css'
         let [passwordWrongUsername,setpasswordWrongUsername]=useState(false)
         let [passwordWrongUserImg,setpasswordWrongUserImg]=useState(false)
         const confirmation_code_array=[1,2,3,4]
+        
         // ------------------------- Confirmation Code  -------------------------//
 
-        const Confirmation_Code=codeInputs.inputOne+codeInputs.inputTwo+codeInputs.inputThree+codeInputs.inputFour
         
         const Signinv= {display: login ? "block": "none" , width:"100%", height:"53%" ,cursor: "pointer"}
         const Loginv = {display: Sigin ? "none" : "block", width:"100%", height:"53%" ,cursor: "pointer"}
@@ -67,6 +70,7 @@ import '../../css/SignIn.css'
         const greeting=useRef()
         const SignInPart=useRef()
         const signInInput=useRef()
+
 //---------------------------------------------------------------- Assigning States -------------------------------------------------------------
 
     // ------------------------- Sign Up button   -------------------------//
@@ -105,61 +109,23 @@ import '../../css/SignIn.css'
                                         setsigninErrorsUsername(false)
                                   
                                         
-                                    if(!signinErrorsEmailDBCheck && !signinErrorsUsername){
-                                        
-                                        setsigninErrorsPassword(false)
-                                        // if(!allFieldMandatorySigninErrror && signinFieldsError){
-                                            axios.post(`http://localhost:2000/user/sendConfirmation`,{name:username}, { withCredentials: true })
-                                            .then(res=>{setsignupmessage(res.data)})    
-                                            setconfirmCode(true)
-                                        // }
-                                
-                                }
-                                  
+                                        if(!signinErrorsEmailDBCheck && !signinErrorsUsername){
+                                            
+                                            setsigninErrorsPassword(false)
+                                            // console.log(loginuseremail,useremail,username,"loginuseremail")
+                                                axios.post(`http://localhost:2000/user/sendConfirmation`,{name:username,email:useremail}, { withCredentials: true })
+                                                .then(res=>{setsignupmessage(res.data)})    
+                                                setconfirmCode(true)
+                                        }
+                                    
                                     }
                                 
-                                    else{
-                                        setsigninErrorsUsername(true)
-                                    }
-                                })
+                                    else{ setsigninErrorsUsername(true)}})
                                 }
-                                else {
-
-                                setsigninErrorsEmailDBCheck(true)
-                           
-                              
-                                
-                                }
+                                else {setsigninErrorsEmailDBCheck(true) }
                             
                            
-                            })
-                            
-                           
-                     
-                                
-                            
-                                 
-                          
-                           
-                            
-                          
-                    }   
-
-                        // if(!signinErrorsEmailDBCheck && !signinErrorsUsername){
-                        //     // const fun=()=>{
-                        //         setsigninErrorsPassword(false)
-                        //         if(!allFieldMandatorySigninErrror && signinFieldsError){
-                        //             axios.post(`http://localhost:2000/user/sendConfirmation`,{name:username}, { withCredentials: true })
-                        //             .then(res=>{setsignupmessage(res.data)})    
-                        //             setconfirmCode(true)
-                        //         }
-                        // // }
-                        // }
-
-                    }
-                }
-            }
-        
+                            })}}}}  
     
 
     }
@@ -194,8 +160,7 @@ import '../../css/SignIn.css'
         if(res.data=='Data Inserted'){
         
             axios.post(`http://localhost:2000/setMainfolder`,{email:useremail,name:username})
-            // axios.post(`http://localhost:2000/user/signupaccess`,{email:useremail}).then(res=>{console.log(res.data,'response coming');dispatch({type:"setAccountData",accData:res.data})})
-            jwtfunction()
+           jwtfunction()
         }
         console.log(res.data);})
         
@@ -414,10 +379,10 @@ import '../../css/SignIn.css'
             </div>
 
              <div id='confirmation_code_inputs_maindiv'>
-            <input type='text'id='confirmation_code_input1' maxLength={1} onChange={(e)=>{return setcodeInputs({...codeInputs,inputOne:e.target.value})}}/>
-            <input type='text'id='confirmation_code_input1' maxLength={1} onChange={(e)=>{return setcodeInputs({...codeInputs,inputTwo:e.target.value})}}/>
-            <input type='text'id='confirmation_code_input1' maxLength={1} onChange={(e)=>{return setcodeInputs({...codeInputs,inputThree:e.target.value})}}/>
-            <input type='text'id='confirmation_code_input1' maxLength={1} onChange={(e)=>{return setcodeInputs({...codeInputs,inputFour:e.target.value})}}/>
+            <input type='text'id='confirmation_code_input1' maxLength={1} onChange={(e)=>{return setconfirmationCodeInput({...confirmationCodeInput,inputOne:e.target.value})}}/>
+            <input type='text'id='confirmation_code_input1' maxLength={1} onChange={(e)=>{return setconfirmationCodeInput({...confirmationCodeInput,inputTwo:e.target.value})}}/>
+            <input type='text'id='confirmation_code_input1' maxLength={1} onChange={(e)=>{return setconfirmationCodeInput({...confirmationCodeInput,inputThree:e.target.value})}}/>
+            <input type='text'id='confirmation_code_input1' maxLength={1} onChange={(e)=>{return setconfirmationCodeInput({...confirmationCodeInput,inputFour:e.target.value})}}/>
             </div> 
            
             <button id='confirmation_code_submit_btn' className='btn btn-dark' onClick={secoundSignupbtn} >Submit</button>
