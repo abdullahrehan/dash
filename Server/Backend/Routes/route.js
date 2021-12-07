@@ -40,13 +40,13 @@ route.post("/convert",async(req,res)=>{
 
 })
 
-// route.get("/",(req,res)=>{
-//     console.log('as')
-//     const sendWebData=()=>{
-//          Model.find( (err,data)=>{res.send(data);})}
-//     sendWebData();
-// // res.send('ok')
-// })     
+route.get("/",(req,res)=>{
+    console.log('as')
+    const sendWebData=()=>{
+         Model.find( (err,data)=>{res.send(data);})}
+    sendWebData();
+// res.send('ok')
+})     
 
 route.post("/nameverify",(req,res)=>{
 
@@ -864,6 +864,7 @@ route.get("/jwt",(req,res)=>{
 // ---------------------------------------------------------Login SignIn Apis----------------------------------------------------------------------
 route.post("/user/sendConfirmation",async(req,res)=>{
    
+    console.log(code)
     const transporter=nodemailer.createTransport({
         service:"gmail",
         // auth:{
@@ -943,6 +944,7 @@ route.post("/user/SignIn",async(req,res)=>{
         })
 
     }else{
+        res.send("Incorrect")
         console.log("denied");
     } 
     

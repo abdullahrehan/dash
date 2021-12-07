@@ -325,6 +325,14 @@
     top: 20%;
     
 }
+#confirmation_code_incorrect_error{
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    left: 27%;
+    bottom: 26%;
+    color: red;
+}
 
 #DemoAccountDiv {
     position: relative;
