@@ -1,72 +1,82 @@
 import React from 'react'
-
-function AuthanticationApis() {
-
-
+import axios from 'axios'
 
        // ------------------------- First Sign Up button -------------------------//
     
-       const firstSignupbtn=async()=>{
+const firstSignupbtn=async(props)=>{
+    
+    const {
+        signinErrorsUsername,
+        SetsigninErrorsUsername,
+        signinErrorsEmail,
+        signinErrorsPassword,
+        SetsigninErrorsPassword,
+        username,
+        useremail,
+        userpassword,
+        SetallFieldMandatorySigninErrror,
+        validator,
+        isValid,
+        allFieldMandatorySigninErrror,
+        Setsignupmessage,
+        SetconfirmCode,
+        SetsigninErrorsEmail,
+        SetsigninErrorsEmailDBCheck,
+        signinErrorsEmailDBCheck
         
-        const signinFieldsError=!signinErrorsUsername && !signinErrorsEmail  && !signinErrorsPassword
+        
+    }=props
+    const signinFieldsError=!signinErrorsUsername && !signinErrorsEmail  && !signinErrorsPassword
+        
+        if(username=='' || useremail=='' || userpassword==''){
+        
+            SetallFieldMandatorySigninErrror(true)
             
-            if(username=='' || useremail=='' || userpassword==''){
-          
-                setallFieldMandatorySigninErrror(true)
-               
-            }
-            else {
-                setallFieldMandatorySigninErrror(false)
+        }
+        else {
+            SetallFieldMandatorySigninErrror(false)
 
-                if (!validator.validate(useremail)){
-                    setsigninErrorsEmail(true)
-                }
-                else{
-                    setsigninErrorsEmail(false)
-                    if(!isValid){setsigninErrorsPassword(true)}
-                    else {
-                        setsigninErrorsPassword(false)
-                        if(!allFieldMandatorySigninErrror && !signinErrorsEmail && !signinErrorsPassword){
-              
-                      
-                     await axios.post(`http://localhost:2000/emailverify`,{email:useremail})
-                            .then((res)=>{
+            if (!validator.validate(useremail)){
+                SetsigninErrorsEmail(true)
+            }
+            else{
+                SetsigninErrorsEmail(false)
+                if(!isValid){SetsigninErrorsPassword(true)}
+                else {
+                    SetsigninErrorsPassword(false)
+                    if(!allFieldMandatorySigninErrror && !signinErrorsEmail && !signinErrorsPassword){
+            
+                    
+                    await axios.post(`http://localhost:2000/emailverify`,{email:useremail})
+                        .then((res)=>{
+                            if(res.data==='available'){
+                                SetsigninErrorsEmailDBCheck(false)
+                                axios.post(`http://localhost:2000/nameverify`,{name:username})
+                                .then((res)=>{
+                                
                                 if(res.data==='available'){
-                                    setsigninErrorsEmailDBCheck(false)
-                                    axios.post(`http://localhost:2000/nameverify`,{name:username})
-                                    .then((res)=>{
+                                    SetsigninErrorsUsername(false)
+                                
                                     
-                                    if(res.data==='available'){
-                                        setsigninErrorsUsername(false)
-                                  
+                                    if(!signinErrorsEmailDBCheck && !signinErrorsUsername){
                                         
-                                        if(!signinErrorsEmailDBCheck && !signinErrorsUsername){
-                                            
-                                            setsigninErrorsPassword(false)
-                                                axios.post(`http://localhost:2000/user/sendConfirmation`,{name:username,email:useremail}, { withCredentials: true })
-                                                .then(res=>{setsignupmessage(res.data)})    
-                                                setconfirmCode(true)
-                                        }
-                                    
+                                        SetsigninErrorsPassword(false)
+                                            axios.post(`http://localhost:2000/user/sendConfirmation`,{name:username,email:useremail}, { withCredentials: true })
+                                            .then(res=>{Setsignupmessage(res.data)})    
+                                            SetconfirmCode(true)
                                     }
                                 
-                                    else{ setsigninErrorsUsername(true)}})
                                 }
-                                else {setsigninErrorsEmailDBCheck(true) }
                             
-                           
-                            })}}}}  
-    
+                                else{ SetsigninErrorsUsername(true)}})
+                            }
+                            else {SetsigninErrorsEmailDBCheck(true) }
+                        
+                        
+                        })}}}}  
 
-    }
- 
 
-
-    return (
-        <div>
-            
-        </div>
-    )
 }
 
-export default AuthanticationApis
+
+export default firstSignupbtn

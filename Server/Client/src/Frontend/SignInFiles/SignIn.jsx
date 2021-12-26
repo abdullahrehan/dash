@@ -91,12 +91,12 @@ import axios from 'axios'
     if(keys[0]==="Alt" && keys[1]==="1"){
             signInFoam()
             setKeys(['Alt'])
-        }
+    }
         
-        if(keys[0]==="Alt" && keys[1]==="2"){
+    if(keys[0]==="Alt" && keys[1]==="2"){
                 logInFoam()
                 setKeys(['Alt'])
-        }       
+    }       
 
 
         useEffect(() => {
